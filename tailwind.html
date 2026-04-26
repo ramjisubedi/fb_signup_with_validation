@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<title>Tailwind Form</title>
+</head>
+
+<body class="bg-gray-100 flex justify-center p-4">
+
+<div class="bg-white p-6 rounded-lg shadow w-full max-w-md">
+  <h2 class="text-xl font-semibold">Get started</h2>
+  <p class="text-gray-500 text-sm">Create your account</p>
+
+  <form id="form" class="space-y-3 mt-3">
+
+    <div class="flex gap-2 flex-col sm:flex-row">
+      <div class="w-full">
+        <input id="firstName" class="input" placeholder="First name">
+        <p class="error-text"></p>
+      </div>
+      <div class="w-full">
+        <input id="lastName" class="input" placeholder="Last name">
+        <p class="error-text"></p>
+      </div>
+    </div>
+
+    <div class="flex gap-2 flex-col sm:flex-row">
+      <div class="w-full">
+        <select id="month" class="input">
+          <option value="">Month</option>
+        </select>
+        <p class="error-text"></p>
+      </div>
+      <div class="w-full">
+        <select id="day" class="input">
+          <option value="">Day</option>
+        </select>
+        <p class="error-text"></p>
+      </div>
+      <div class="w-full">
+        <select id="year" class="input">
+          <option value="">Year</option>
+        </select>
+        <p class="error-text"></p>
+      </div>
+    </div>
+
+    <div>
+      <select id="gender" class="input">
+        <option value="">Select gender</option>
+      </select>
+      <p class="error-text"></p>
+    </div>
+
+    <div>
+      <input id="contact" class="input" placeholder="Email or phone">
+      <p class="error-text"></p>
+    </div>
+
+    <div>
+      <input type="password" id="password" class="input" placeholder="Password">
+      <p class="error-text"></p>
+    </div>
+
+    <button class="w-full bg-blue-600 text-white py-2 rounded-full mt-2">
+      Submit
+    </button>
+  </form>
+</div>
+
+<style>
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.error {
+  border-color: red !important;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  height: 14px;
+}
+</style>
+
+<script>
+const form = document.getElementById("form");
+
+const fields = [
+  { el: firstName, validate: v => v.trim() || "Required" },
+  { el: lastName, validate: v => v.trim() || "Required" },
+  { el: month, validate: v => v || "Required" },
+  { el: day, validate: v => v || "Required" },
+  { el: year, validate: v => v || "Required" },
+  { el: gender, validate: v => v || "Required" },
+  {
+    el: contact,
+    validate: v => {
+      if (!v.trim()) return "Required";
+      return /^\S+@\S+\.\S+$/.test(v) || /^[0-9]{7,15}$/.test(v)
+        || "Invalid";
+    }
+  },
+  { el: password, validate: v => v.length >= 6 || "Min 6 chars" }
+];
+
+function showError(el, msg) {
+  el.classList.add("error");
+  el.nextElementSibling.textContent = msg;
+}
+
+function clearError(el) {
+  el.classList.remove("error");
+  el.nextElementSibling.textContent = "";
+}
+
+function validateField(f) {
+  const res = f.validate(f.el.value);
+  if (res !== true) return showError(f.el, res), false;
+  clearError(f.el);
+  return true;
+}
+
+fields.forEach(f => f.el.addEventListener("blur", () => validateField(f)));
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  let valid = true;
+
+  fields.forEach(f => {
+    if (!validateField(f)) valid = false;
+  });
+
+  if (valid) {
+    alert("Success!");
+    form.reset();
+    fields.forEach(f => clearError(f.el));
+  }
+});
+</script>
+
+</body>
+</html>
