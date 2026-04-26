@@ -169,11 +169,11 @@ const form = document.getElementById("form");
 const fields = [
   {
     el: firstName,
-    validate: v => v.trim() || "First name required"
+    validate: v => v.trim() !== "" || "First name required"
   },
   {
     el: lastName,
-    validate: v => v.trim() || "Last name required"
+    validate: v => v.trim() !== "" || "Last name required"
   },
   {
     el: month,
