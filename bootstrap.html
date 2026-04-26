@@ -86,8 +86,8 @@
 const form = document.getElementById("form");
 
 const fields = [
-  { el: firstName, validate: v => v.trim() || "First name required" },
-  { el: lastName, validate: v => v.trim() || "Last name required" },
+  { el: firstName, validate: v => v.trim() !== "" || "First name required" },
+  { el: lastName, validate: v => v.trim() !== "" || "Last name required" },
   { el: month, validate: v => v || "Select month" },
   { el: day, validate: v => v || "Select day" },
   { el: year, validate: v => v || "Select year" },
