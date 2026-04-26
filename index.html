@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Facebook Signup</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .container {
+    background: #fff;
+    padding: 25px;
+    width: 400px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    margin-bottom: 5px;
+  }
+
+  p {
+    color: #606770;
+    font-size: 14px;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .field {
+    margin-top: 15px;
+    flex: 1;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd0d5;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #1877f2;
+  }
+
+  .error {
+    border-color: red !important;
+  }
+
+  .error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #166fe5;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Get started on Facebook</h2>
+  <p>Create an account to connect with friends.</p>
+
+  <form id="signupForm">
+
+    <div class="row">
+      <div class="field">
+        <input type="text" id="firstName" placeholder="First name">
+        <div class="error-text"></div>
+      </div>
+      <div class="field">
+        <input type="text" id="lastName" placeholder="Last name">
+        <div class="error-text"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <select id="month">
+          <option value="">Month</option>
+          <option>Jan</option><option>Feb</option><option>Mar</option>
+        </select>
+        <div class="error-text"></div>
+      </div>
+      <div class="field">
+        <select id="day">
+          <option value="">Day</option>
+          <option>1</option><option>2</option><option>3</option>
+        </select>
+        <div class="error-text"></div>
+      </div>
+      <div class="field">
+        <select id="year">
+          <option value="">Year</option>
+          <option>2000</option><option>2001</option>
+        </select>
+        <div class="error-text"></div>
+      </div>
+    </div>
+
+    <div class="field">
+      <select id="gender">
+        <option value="">Select your gender</option>
+        <option>Male</option>
+        <option>Female</option>
+      </select>
+      <div class="error-text"></div>
+    </div>
+
+    <div class="field">
+      <input type="text" id="contact" placeholder="Mobile number or email">
+      <div class="error-text"></div>
+    </div>
+
+    <div class="field">
+      <input type="password" id="password" placeholder="Password">
+      <div class="error-text"></div>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<script>
+const form = document.getElementById("signupForm");
+
+const fields = {
+  firstName: {
+    el: document.getElementById("firstName"),
+    validate: v => v.trim() !== "" || "First name required"
+  },
+  lastName: {
+    el: document.getElementById("lastName"),
+    validate: v => v.trim() !== "" || "Last name required"
+  },
+  month: {
+    el: document.getElementById("month"),
+    validate: v => v !== "" || "Select month"
+  },
+  day: {
+    el: document.getElementById("day"),
+    validate: v => v !== "" || "Select day"
+  },
+  year: {
+    el: document.getElementById("year"),
+    validate: v => v !== "" || "Select year"
+  },
+  gender: {
+    el: document.getElementById("gender"),
+    validate: v => v !== "" || "Select gender"
+  },
+  contact: {
+    el: document.getElementById("contact"),
+    validate: v => {
+      if (!v.trim()) return "Contact required";
+      const email = /^\S+@\S+\.\S+$/;
+      const phone = /^[0-9]{7,15}$/;
+      return email.test(v) || phone.test(v) || "Enter valid email or phone";
+    }
+  },
+  password: {
+    el: document.getElementById("password"),
+    validate: v => v.length >= 6 || "Min 6 characters"
+  }
+};
+
+function showError(input, message) {
+  input.classList.add("error");
+  input.nextElementSibling.textContent = message;
+}
+
+function clearError(input) {
+  input.classList.remove("error");
+  input.nextElementSibling.textContent = "";
+}
+
+function validateField(field) {
+  const value = field.el.value;
+  const result = field.validate(value);
+
+  if (result !== true) {
+    showError(field.el, result);
+    return false;
+  } else {
+    clearError(field.el);
+    return true;
+  }
+}
+
+// Blur validation
+Object.values(fields).forEach(field => {
+  field.el.addEventListener("blur", () => validateField(field));
+});
+
+// Submit validation
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  let valid = true;
+
+  Object.values(fields).forEach(field => {
+    if (!validateField(field)) valid = false;
+  });
+
+  if (valid) {
+    alert("Form submitted successfully!");
+    form.reset();
+  }
+});
+</script>
+
+</body>
+</html>
